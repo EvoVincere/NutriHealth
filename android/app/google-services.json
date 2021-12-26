@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "820394232353",
+    "project_id": "nutrihealth-123",
+    "storage_bucket": "nutrihealth-123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820394232353:android:a0510761842bf053e37160",
+        "android_client_info": {
+          "package_name": "com.nutrihealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820394232353-aodslcc9790qv4l81m1ob8o3kohdulie.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nutrihealth",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "820394232353-rs2cvtani3nv1shm5r662jno4vjn01c9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgBAUKENXUffUa6X_-IiPpaQ8LWYFRDM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820394232353-rs2cvtani3nv1shm5r662jno4vjn01c9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
