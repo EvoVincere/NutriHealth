@@ -21,16 +21,16 @@ const PasswordBaru = ({navigation}) => {
 
         <View style={{marginLeft:21, marginTop:39}}>
             <Text style={{color:'black',fontSize:14,marginBottom:5}}>Kata Sandi Baru</Text>
-            <TextInput placeholder="Masukkan Kata Sandi Baru" placeholderTextColor="grey" style={{borderWidth: 2,borderColor:'black', borderRadius:10, height:50, fontSize: 13, paddingLeft:20, paddingRight:10, backgroundColor: 'white', marginRight: 58, color: 'black'}}/>
+            <TextInput placeholder="Masukkan Kata Sandi Baru" placeholderTextColor="grey" style={{borderColor:'black', borderRadius:10, height:50, fontSize: 13, paddingLeft:20, paddingRight:10, backgroundColor: 'white', marginRight: 58, color: 'black'}}/>
         </View>
         <View style={{marginLeft:21, marginTop:24}}>
             <Text style={{color:'black',fontSize:14,marginBottom:5}}>Konfirmasi Kata Sandi Baru</Text>
-            <TextInput placeholder="Konfirmasi Kata Sandi Baru" placeholderTextColor="grey" style={{borderWidth: 2,borderColor:'black', borderRadius:10, height:50, fontSize: 13, paddingLeft:20, paddingRight:10, backgroundColor: 'white', marginRight: 58, color: 'black'}}/>
+            <TextInput placeholder="Konfirmasi Kata Sandi Baru" placeholderTextColor="grey" style={{shadowColor:'#3A86FF', borderRadius:10, height:50, fontSize: 13, paddingLeft:20, paddingRight:10, backgroundColor: 'white', marginRight: 58, color: 'black'}}/>
         </View>
 
         <View style={{alignItems:'center',marginTop:32}}>
             <TouchableOpacity onPress={()=> navigation.push('Login')} style={{backgroundColor:'#4F3E65',width:89,height:40,justifyContent:'center',alignItems:'center',borderRadius:7}}>
-                <Text>OK</Text>
+                <Text style={{color:'#FFF'}}>OK</Text>
             </TouchableOpacity>
         </View>
         

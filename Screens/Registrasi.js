@@ -12,6 +12,7 @@ import {
     SafeAreaView
 } from 'react-native';
 import { AuthContext } from "./Context";
+
 const Registrasi = ({navigation}) => {
     const [name,setName] = React.useState("");
     const [email,setEmail] = React.useState("");
@@ -43,7 +44,7 @@ const Registrasi = ({navigation}) => {
         </View>
         
         <View style={{marginLeft:25,flexDirection:'row',marginTop:42}}>
-            <TouchableOpacity onPress={() => on}>
+            <TouchableOpacity>
                 <Image source={googleLogo} style={{width:45, height:45,backgroundColor:'#FFF',borderRadius:5}}/>
             </TouchableOpacity>
             <TouchableOpacity> 

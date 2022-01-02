@@ -1,53 +1,51 @@
-import React from "react";
+import React,{useState,useContext} from "react";
 import {
     Text,
     View,
     ScrollView,
     Button,
     TouchableOpacity,
-    Image
+    Image,
+    useWindowDimensions,
 } from 'react-native';
+import { TabView, SceneMap } from "react-native-tab-view";
 
-import fotoo from './../Image/food.png';
+
+import MakananScreen from "./MakananScreen";
+import ResepScreen from "./ResepScreen";
+import TopNavigation from "./TopNavigation";
+
 const Favorite = () => {
+    const layout = useWindowDimensions();
+    const renderScene = SceneMap({
+        first: MakananScreen,
+        second: ResepScreen,
+      });
+    const [index, setIndex] = useState(1);
+    const [routes] = useState([
+        {key: 'first', title: 'Makanan'},
+        {key: 'second', title: 'Resep'},
+        
+    ]);
+
     return(
- 
      <View style={{flex:1}}>
          <View>
             <Text style={{color: 'black',fontSize:22,fontWeight:'bold',marginTop:27,marginLeft:67}}>Favorit</Text>
          </View>
-        <View style={{flexDirection:'row'}}>
-            <TouchableOpacity style={{flexDirection:'row',marginLeft:49,marginTop:31,backgroundColor:'#2F80ED',borderTopLeftRadius:16,borderBottomLeftRadius:16,width:156,height:48}} > 
-                <Text style={{color:'#FFF',alignSelf:'center',marginLeft:50}}>Makanan</Text>
-            </TouchableOpacity>
-             <TouchableOpacity style={{flexDirection:'row',marginTop:31,backgroundColor:'#ECFAFF',borderTopRightRadius:16,borderBottomRightRadius:16,width:156,height:48}} > 
-                <Text style={{color:'#2F80ED',alignSelf:'center',marginLeft:50}}>Resep</Text>
-            </TouchableOpacity>    
-        </View>
-        <View style={{flexDirection:'row',alignItems:'center',alignContent:'center',alignSelf:'center'}}>
-            <TouchableOpacity style={{flexDirection:'row',marginVertical:23,marginLeft:16,backgroundColor:'#ECFAFF',width:96,height:96,alignItems:'center'}}>
-                <Image source={fotoo} style={{marginLeft:14,width:64,height:64}}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={{flexDirection:'row',marginVertical:23,marginLeft:16,backgroundColor:'#ECFAFF',width:96,height:96,alignItems:'center'}}>
-                <Image source={fotoo} style={{marginLeft:14,width:64,height:64}}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={{flexDirection:'row',marginVertical:23,marginLeft:16,backgroundColor:'#ECFAFF',width:96,height:96,alignItems:'center'}}>
-                <Image source={fotoo} style={{marginLeft:14,width:64,height:64}}/>
-            </TouchableOpacity>
-        </View>
-        <View style={{flexDirection:'row',alignItems:'center',alignContent:'center',alignSelf:'center'}}>
-            <TouchableOpacity style={{flexDirection:'row',marginVertical:23,marginLeft:16,backgroundColor:'#ECFAFF',width:96,height:96,alignItems:'center'}}>
-                <Image source={fotoo} style={{marginLeft:14,width:64,height:64}}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={{flexDirection:'row',marginVertical:23,marginLeft:16,backgroundColor:'#ECFAFF',width:96,height:96,alignItems:'center'}}>
-                <Image source={fotoo} style={{marginLeft:14,width:64,height:64}}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={{flexDirection:'row',marginVertical:23,marginLeft:16,backgroundColor:'#ECFAFF',width:96,height:96,alignItems:'center'}}>
-                <Image source={fotoo} style={{marginLeft:14,width:64,height:64}}/>
-            </TouchableOpacity>
-        </View>
+        
+         <TabView 
+            navigationState={{index,routes}}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            intialLayout={{width: layout.width}}
+            style={{marginTop:26,borderRadius: 16,}}
+            />
+          
+        
      </View>
     ); 
  } 
+ 
 
  export default Favorite;

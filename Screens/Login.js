@@ -14,7 +14,7 @@ import { AuthContext } from "./Context";
 
 
 const Login = ({navigation}) => {
-    const {Login,googleLogin}=React.useContext(AuthContext);
+    const {Login,googleLogin, fbLogin}=React.useContext(AuthContext);
     const [email,setEmail] = React.useState('');
     const [password,setPassword] = React.useState('');
     const [name,setName] = React.useState('');
@@ -43,7 +43,7 @@ const Login = ({navigation}) => {
             <TouchableOpacity onPress={() => googleLogin()}>
                 <Image source={googleLogo} style={{width:45, height:45,backgroundColor:'#FFF',borderRadius:5}}/>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => fbLogin()}>
                 <Image source={facebookLogo} style={{width:45,height:45,backgroundColor:'#FFF',borderRadius:5,marginLeft:17}}/>
             </TouchableOpacity>
         </View>

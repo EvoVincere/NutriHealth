@@ -10,9 +10,9 @@ import Search from "./Screens/Search";
 import Favorite from "./Screens/Favorite";
 import Profile from "./Screens/Profile";
 import Food from "./Image/food.png";
+import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 
-
-import { Icon } from "react-native-vector-icons/MaterialCommunityIcons";
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import Login from "./Screens/Login";
 import LupaPassword from "./Screens/lupaPassword";
 import Registrasi from "./Screens/Registrasi";
@@ -24,6 +24,7 @@ import Logout from "./Screens/Logout";
 import Setting from "./Screens/SettingScreen";
 import { GoogleSignin ,statusCodes} from "@react-native-community/google-signin";
 import EditProfile from "./Screens/EditProfileScreen";
+import CallAPI from "./Screens/CallAPI";
 
 
 const SettingStack = createNativeStackNavigator();
@@ -101,16 +102,38 @@ const FavoriteStackScreen = () =>{
   );
 }
 
+// Screen Names
+
+const HomeButton = "Home";
+const SearchButton = "Search";
+const FavoriteButton = "Favorite";
+const ProfileButton = "Profile";
 const TabsScreen = () =>{
   return(
+  <Tabs.Navigator initialRouteName={HomeButton} 
+    screenOptions={({route}) =>({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          let rn = route.name;
 
-  <Tabs.Navigator screenOptions={{
-    tabBarShowLabel: false,
-}}>
-      <Tabs.Screen name="HomeButton" component={HomeStackScreen} options={{title:"Home",headerShown:false}}/>
-      <Tabs.Screen name="SearchButton" component={SearchStackScreen} options={{title:"Search",headerShown:false}}/>
-      <Tabs.Screen name="FavoriteButton" component={FavoriteStackScreen} options={{title:"Favorite",headerShown:false}}/>  
-      <Tabs.Screen name="ProfileButton" component={ProfileStackScreen} options={{headerShown:false}}/>  
+          if (rn === HomeButton){
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (rn === SearchButton) {
+            iconName = focused ? 'search' : 'search-outline';
+          } else if (rn === FavoriteButton) {
+            iconName = focused ? 'heart' : 'heart-outline';
+          } else if (rn === ProfileButton) {
+            iconName = focused ? 'person-circle' : 'person-circle-outline';
+          }
+          
+          return <Ionicons name={iconName} size={size} color={color}/>
+
+        }, tabBarShowLabel : false,
+    })}>
+      <Tabs.Screen name={HomeButton} component={HomeStackScreen} options={{title:"Home",headerShown:false}}/>
+      <Tabs.Screen name={SearchButton} component={SearchStackScreen} options={{title:"Search",headerShown:false}}/>
+      <Tabs.Screen name={FavoriteButton} component={FavoriteStackScreen} options={{title:"Favorite",headerShown:false}}/>  
+      <Tabs.Screen name={ProfileButton} component={ProfileStackScreen} options={{headerShown:false}}/>  
     </Tabs.Navigator>
   );
 }
@@ -168,6 +191,34 @@ export default function App () {
             webClientId: '820394232353-rs2cvtani3nv1shm5r662jno4vjn01c9.apps.googleusercontent.com',
           });
       },  
+      fbLogin: async () => {
+        try {
+          // Attempt login with permissions
+          const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+          if (result.isCancelled) {
+            throw 'User cancelled the login process';
+          }
+
+          // Once signed in, get the users AccesToken
+          const data = await AccessToken.getCurrentAccessToken();
+
+          if (!data) {
+            throw 'Something went wrong obtaining access token';
+          }
+
+          // Create a Firebase credential with the AccessToken
+          const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+          // Sign-in the user with the credential
+          await auth().signInWithCredential(facebookCredential)
+          .catch(error => {
+              console.log('Something went wrong with sign up: ', error);
+          });
+        } catch(error) {
+          console.log({error});
+        }
+      },
      
     }
   
