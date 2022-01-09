@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "442569004571",
+    "firebase_url": "https://database-cca7e-default-rtdb.firebaseio.com",
+    "project_id": "database-cca7e",
+    "storage_bucket": "database-cca7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442569004571:android:d3556c412e9bd3184e4abe",
+        "android_client_info": {
+          "package_name": "com.nutrihealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442569004571-87bim1fuuem3l7krsh32g2lq30vd2prk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKcES_KGI3tK32NoVWE9P2WwRVXZ2y5fQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442569004571-87bim1fuuem3l7krsh32g2lq30vd2prk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -6,12 +6,18 @@ import {
     View,
     ScrollView,
     Button,
-    TouchableOpacity
+    TouchableOpacity,
+    StyleSheet,
+    
 } from 'react-native';
-import CallAPI from "./CallAPI";
+import { ArticleContext } from "./API/ContextAPI";
+import { categories } from "./API/CallAPI";
+import contentView from "./ContentView";
 
 
-const HomeScreen = ({route,navigation}) => {
+
+const HomeScreen = ({navigation}) => {
+    const {index,setIndex} = useContext(ArticleContext);
    return(
 
     <View style={{flex:1, alignItems: 'center', justifyContent: 'flex-start',paddingTop:50,backgroundColor:'#FFF'}}>
@@ -23,7 +29,7 @@ const HomeScreen = ({route,navigation}) => {
         </View>
         <View style={{marginTop:32}}>
             <TouchableOpacity style={{backgroundColor:'#2F80ED', borderRadius: 32, width: 332, height:90, justifyContent:'center'}}
-                onPress={()=> {}} >
+                onPress={()=>{navigation.navigate('ArticleView1Screen')} } >
                 <Text style={{color: '#FFF',fontSize:10,marginLeft:28}}>Artikel</Text>
                 <Text style={{color: '#000',fontSize:17,marginLeft:28,fontWeight:'700'}}>Fast Food Untuk Makanan Pokok?</Text>
             </TouchableOpacity>
@@ -32,22 +38,26 @@ const HomeScreen = ({route,navigation}) => {
             <Text style={{color:'#000',fontSize:22,marginRight:195}}>Topik Pilihan</Text>
         </View>
         <View>
-            <TouchableOpacity style={{backgroundColor:'#FFF2F0',marginTop:27,width:358,height:41,borderRadius:32,justifyContent:'center'}}>
+            <TouchableOpacity style={{backgroundColor:'#FFF2F0',marginTop:27,width:358,height:41,borderRadius:32,justifyContent:'center'}}
+                onPress={()=> navigation.navigate('ArticleView2Screen')}>
                 <Text style={{color:'#4D0A00',marginLeft:19}}>Menghilangkan lemak</Text>
             </TouchableOpacity>
         </View>
         <View>
-            <TouchableOpacity style={{backgroundColor:'#EFF7EE',marginTop:27,width:358,height:41,borderRadius:32,justifyContent:'center'}}>
+            <TouchableOpacity style={{backgroundColor:'#EFF7EE',marginTop:27,width:358,height:41,borderRadius:32,justifyContent:'center'}}
+                onPress={()=> navigation.navigate('ArticleView3Screen')}>
                 <Text style={{color:'#1C3418',marginLeft:19}}>Rujak pedas yang menyegarkan </Text>
             </TouchableOpacity>
         </View>
         <View>
-            <TouchableOpacity style={{backgroundColor:'#EEF0F7',marginTop:27,width:358,height:41,borderRadius:32,justifyContent:'center'}}>
+            <TouchableOpacity style={{backgroundColor:'#EEF0F7',marginTop:27,width:358,height:41,borderRadius:32,justifyContent:'center'}}
+                 onPress={()=> navigation.navigate('ArticleView4Screen')}>
                 <Text style={{color:'#1C3418',marginLeft:19}}>Sehat itu sulit</Text>
             </TouchableOpacity>
         </View>
         <View style={{marginTop:32}}>
-            <TouchableOpacity style={{backgroundColor:'#2F80ED', borderRadius: 32, width: 332, height:90, justifyContent:'center'}}>
+            <TouchableOpacity style={{backgroundColor:'#2F80ED', borderRadius: 32, width: 332, height:90, justifyContent:'center'}}
+                 onPress={()=> navigation.navigate('ArticleView5Screen')}>
                 <Text style={{color: '#FFF',fontSize:10,marginLeft:28}}>Tips Kesehatan</Text>
                 <Text style={{color: '#000',fontSize:17,marginLeft:28,fontWeight:'700'}}>Susah Naikin Berat Badan?</Text>
             </TouchableOpacity>
@@ -57,3 +67,4 @@ const HomeScreen = ({route,navigation}) => {
 }
 
 export default HomeScreen;
+

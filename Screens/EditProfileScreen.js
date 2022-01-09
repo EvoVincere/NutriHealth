@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { View,Text,TouchableOpacity,ImageBackground,StyleSheet,TextInput } from "react-native";
 
 
@@ -6,14 +6,122 @@ import  Icon  from "react-native-vector-icons/MaterialCommunityIcons";
 import  FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from "react-native-paper";
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from "react-native-reanimated";
+import ImagePicker from 'react-native-image-crop-picker';
+import firestore from '@react-native-firebase/firestore';
+import { ReactNativeFirebase } from "@react-native-firebase/app";
+
+
+
+
 
 const EditProfile = () => {
+
+  const [image,setImage]= useState('https://mir-s3-cdn-cf.behance.net/project_modules/disp/b3053232163929.567197ac6e6f5.png');
     const {colors} = useTheme();
+/*    const usersCollection = firestore().collection('Users');   
+    useEffect(()=>{
+      const user = await firestore().collection('Users').doc('ABC').get();
+    },[])
+    const [user,setUser] = useState();
+    const storeData = () => {
+      firestore()
+        .collection('Users')
+        .doc('ABC')
+        .set({
+        name: 'Ada Lovelace',
+        age: 30,
+  })
+  .then(() => {
+    console.log('User added!');
+  });
+    }
+
+    const UpdateData = () => {
+      firestore()
+      .collection('Users')
+      .doc('ABC')
+      .update({
+      'info.address.zipcode': 94040,
+    })
+      .then(() => {
+        console.log('User updated!');
+  });
+    }
+*/
+    const takePhotoFromCamera = () => {
+      ImagePicker.openCamera({
+        compressImageMaxWidth:300,
+        compressImageMaxHeight:300,
+        width: 300,
+        height: 300,
+        cropping: true,
+        compressImageQuality: 0.7,
+      }).then(image => {
+        console.log(image);
+        setImage(image.path);
+        this.bs.current.snapTo(1);
+      });
+    }
+
+    const choosePhotoFromLibrary = () => {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+        compressImageQuality: 0.7,
+      }).then(image => {
+        console.log(image);
+        setImage(image.path);
+        this.bs.current.snapTo(1);
+      });
+    }
+
+    renderInner = () => (
+      <View style={styles.panel}>
+        <View style={{alignItems:'center'}}>
+          <Text style={styles.panelTitle}>Upload Photo</Text>
+          <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+        </View>
+        <TouchableOpacity style={styles.panelButton} onPress={takePhotoFromCamera}>
+          <Text style={styles.panelButtonTitle}>Take Photo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.panelButton} onPress={choosePhotoFromLibrary}>
+          <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.panelButton} onPress={() => this.bs.current.snapTo(1)}>
+          <Text style={styles.panelButtonTitle}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    );
+
+    renderHeader = () => (
+      <View style={styles.header}>
+        <View style={styles.panelHeader}>
+          <View style={styles.panelHandle}/>
+        </View>
+      </View>
+    )
+
+
+    bs = React.createRef(); //reference hook
+    fall= new Animated.Value(1); // buat animasi
+
     return(
         <View style={styles.container}>
-            <View style={{margin:20}}>
+          <BottomSheet 
+            ref={this.bs}
+            snapPoints={[330,0]}
+            initialSnap={1}
+            callbackNode={this.fall}
+            enabledGestureInteraction={true}
+            renderContent={this.renderInner}
+            renderHeader={this.renderHeader}
+            />
+            <Animated.View style={{margin:20, opacity: Animated.add(0.1, Animated.multiply(this.fall,1.0)),}}>
                 <View style={{alignItems:'center'}}>
-                    <TouchableOpacity onPress={()=> {}}>
+                    <TouchableOpacity onPress={()=> this.bs.current.snapTo(0)}>
                         <View style={{
                             height : 100,
                             width: 100,
@@ -22,7 +130,7 @@ const EditProfile = () => {
                             alignItems: 'center',
                         }}>
                             <ImageBackground source={{
-                                uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/b3053232163929.567197ac6e6f5.png'
+                                uri: image,
                             }} style={{height:100, width:100}}
                             imageStyle={{borderRadius:15}}>
                                 <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
@@ -84,11 +192,11 @@ const EditProfile = () => {
                         />
                         
                     </View>
-                    <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
+                    <TouchableOpacity style={styles.commandButton} onPress={() => {storeData()}}>
                             <Text style={styles.panelButtonTitle}>Submit</Text>        
                     </TouchableOpacity>
                 </View>
-            </View>
+            </Animated.View>
         </View>
     );
 }
@@ -151,7 +259,7 @@ const styles = StyleSheet.create({
     panelButton: {
       padding: 13,
       borderRadius: 10,
-      backgroundColor: '#FF6347',
+      backgroundColor: '#2F80ED',
       alignItems: 'center',
       marginVertical: 7,
     },
@@ -165,7 +273,7 @@ const styles = StyleSheet.create({
       marginTop: 10,
       marginBottom: 10,
       borderBottomWidth: 1,
-      borderBottomColor: '#f2f2f2',
+      borderBottomColor: '#719ECE',
       paddingBottom: 5,
     },
     actionError: {

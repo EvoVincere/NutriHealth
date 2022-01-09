@@ -1,5 +1,5 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, {useState} from "react";
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     Text,
@@ -16,12 +16,16 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EditProfileScreen from "./EditProfileScreen";
 import HomeScreen from "./HomeScreen";
-
+import { ReactNativeFirebase } from "@react-native-firebase/app";
+import firestore from '@react-native-firebase/firestore';
+const usersCollection = firestore().collection('Users');
 
 
 
 const Profile = ({navigation}) => {
     const {Logout} = React.useContext(AuthContext);
+    const [image,setImage]= useState('https://mir-s3-cdn-cf.behance.net/project_modules/disp/b3053232163929.567197ac6e6f5.png');
+    
     return(
  
      <SafeAreaView style={styles.container}>
@@ -30,7 +34,7 @@ const Profile = ({navigation}) => {
                  <Text style={{justifyContent:'center',color:'#000',fontSize:22,fontWeight:'bold',marginTop:33}}>Profil</Text>
             <Avatar.Image 
                 source={{
-                    uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/b3053232163929.567197ac6e6f5.png'
+                    uri: image,
                 }}
                 size={160}
                 style={{marginTop:22}}

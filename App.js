@@ -1,6 +1,6 @@
-import React, { useState,Component } from "react";
+import React, { useState,Component, useEffect } from "react";
 
-import { SafeAreaView,View,Text,TouchableOpacity,Image,AsyncStorage  } from "react-native";
+import { SafeAreaView,View,Text,TouchableOpacity,Image,StyleSheet,} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -11,6 +11,7 @@ import Favorite from "./Screens/Favorite";
 import Profile from "./Screens/Profile";
 import Food from "./Image/food.png";
 import { LoginManager, AccessToken } from "react-native-fbsdk-next";
+import firestore from '@react-native-firebase/firestore';
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Login from "./Screens/Login";
@@ -24,7 +25,13 @@ import Logout from "./Screens/Logout";
 import Setting from "./Screens/SettingScreen";
 import { GoogleSignin ,statusCodes} from "@react-native-community/google-signin";
 import EditProfile from "./Screens/EditProfileScreen";
-import CallAPI from "./Screens/CallAPI";
+import LinearGradient from 'react-native-linear-gradient';
+import Context from "./Screens/API/ContextAPI";
+import {ArticleView1 , ArticleView2, ArticleView3,ArticleView4,ArticleView5,SearchArticle1,
+  SearchArticle2,SearchArticle3, TrendingArticle1, TrendingArticle4, TrendingArticle2,TrendingArticle3,googleSearch } from "./Screens/ContentView";
+import auth from '@react-native-firebase/auth';
+
+
 
 
 const SettingStack = createNativeStackNavigator();
@@ -33,15 +40,15 @@ const HomeStack= createNativeStackNavigator();
 const SearchStack= createNativeStackNavigator();
 const ProfileStack= createNativeStackNavigator();
 const FavoriteStack = createNativeStackNavigator();
-const EditProfileStack = createNativeStackNavigator();
-const MainStack = createNativeStackNavigator();
 const Tabs= createBottomTabNavigator();  
+
+
 
 
 function OpeningStackScreen(){
     return(
     <NavigationContainer independent={true}>
-      <OpeningStack.Navigator initialRouteName="Main">
+      <OpeningStack.Navigator initialRouteName={"Main"} screenOptions={{headerTransparent: true}}>
         <OpeningStack.Screen component={Main} name="Main" options={{headerShown:false}}/>
         <OpeningStack.Screen component={Login} name="Login" options={{headerShown:false}}/>
         <OpeningStack.Screen component={LupaPassword} name="LupaPassword" options={{title:"",headerTintColor:'#FFF',headerStyle:{backgroundColor:'#3A86FF'}}}/>
@@ -60,8 +67,13 @@ function OpeningStackScreen(){
 const HomeStackScreen = () => {
   return(
 
-  <HomeStack.Navigator>
+  <HomeStack.Navigator initialRouteName="HomeScreen">
     <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown:false}}/>
+    <HomeStack.Screen name="ArticleView1Screen" component={ArticleView1} options={{title:''}}/>
+    <HomeStack.Screen name="ArticleView2Screen" component={ArticleView2} options={{title:''}}/>
+    <HomeStack.Screen name="ArticleView3Screen" component={ArticleView3} options={{title:''}}/>
+    <HomeStack.Screen name="ArticleView4Screen" component={ArticleView4} options={{title:''}}/>
+    <HomeStack.Screen name="ArticleView5Screen" component={ArticleView5} options={{title:''}}/>
   </HomeStack.Navigator>
   );
 }
@@ -70,6 +82,14 @@ const SearchStackScreen = () => {
 
   <SearchStack.Navigator>
     <SearchStack.Screen name="SearchScreen" component={Search} options={{headerShown:false}}/>
+    <SearchStack.Screen name="SearchArticle1Screen" component={SearchArticle1} options={{title:''}}/>
+    <SearchStack.Screen name="SearchArticle2Screen" component={SearchArticle2} options={{title:''}}/>
+    <SearchStack.Screen name="SearchArticle3Screen" component={SearchArticle3} options={{title:''}}/>
+    <SearchStack.Screen name="TrendingArticle1Screen" component={TrendingArticle1} options={{title:''}}/>
+    <SearchStack.Screen name="TrendingArticle2Screen" component={TrendingArticle2} options={{title:''}}/>
+    <SearchStack.Screen name="TrendingArticle3Screen" component={TrendingArticle3} options={{title:''}}/>
+    <SearchStack.Screen name="TrendingArticle4Screen" component={TrendingArticle4} options={{title:''}}/>
+    <SearchStack.Screen name="googleSearch" component={googleSearch} options={{title:''}}/>
   </SearchStack.Navigator>
   );
 }
@@ -163,30 +183,65 @@ const AuthStackScreen = () =>{
     <OpeningStackScreen />
   );
 }
-export default function App () {
-  const[userToken,setUserToken]=React.useState(null)
+const App = ({children})=> {
+  const[userToken,setUserToken]=React.useState(null);
+  
   const authContext = React.useMemo(()=>{
     return{
-      Login: async() =>{
+     
+      Login: async(email,password) =>{
+      
         setUserToken('abc')
+       /* try{
+         await auth().signInWithEmailAndPassword(email,password);
+        } catch(e) {
+          console.log(e);
+        } */
       },
-      Registrasi: () =>{
-        setUserToken('abc')
+      Registrasi: async(email,password) =>{
+        try{
+          await auth().createUserWithEmailAndPassword(email,password)
+          .then(()=>{
+            firestore().collection('users').doc(auth().currentUser.uid)
+            .set({
+              fname: '',
+              lname: '',
+              email: email,
+              createAt: firestore.Timestamp.fromDate(new Date()),
+              userImg: null,
+            })
+            .catch(error =>{
+              console.log('Something wrong with added user to firestore',error);
+            })
+          })
+          .catch(error => {
+            console.log('Something wrong with sign up',error);
+          });
+        }catch (e) {
+          console.log(e);
+        }
       },
       LupaPassword: () =>{
         setUserToken('abc')
       },
-      Logout: () =>{
-        setUserToken(null)
+      Logout: async() =>{
+        try{
+          await auth().signOut();
+        } catch (e){
+          console.log(e);
+        }
+        setUserToken(null);
       },
       googleLogin: async() => {
         try{
-          await GoogleSignin.hasPlayServices();
-          const userInfo = await GoogleSignin.signIn();
-          console.log("userInfo",userInfo)
-        } catch(error) {
+          const idToken = await GoogleSignin.signIn();
+          const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+          await auth().signInWithCredential(googleCredential);
+        } catch(error){
           console.log({error});
         }
+        
+        
          GoogleSignin.configure({
             webClientId: '820394232353-rs2cvtani3nv1shm5r662jno4vjn01c9.apps.googleusercontent.com',
           });
@@ -218,24 +273,30 @@ export default function App () {
         } catch(error) {
           console.log({error});
         }
+        
       },
      
     }
+
   
   },[])
     return(
       <AuthContext.Provider value={authContext}>
+        {children}
         <NavigationContainer independent={true}>
          <RootStackScreen userToken={userToken}/>
         </NavigationContainer>
       </AuthContext.Provider>
     );
-}
+    
+} 
  
 
 const Main= ({navigation})  => {
     return (
-      <SafeAreaView style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor: '#3A86FF'}}>
+      
+        <LinearGradient colors={['#3a86ff', '#db46c3', ]} style={styles.linearGradient}>
+          <View style={{flex:1,justifyContent:'center',alignItems:'center',}}>
           <Image source={Food} style={{width:100,height:100,marginVertical:45}}/>
         <View>
           <Text style={{color:'black', fontWeight: 'bold', fontSize:24,}}>NutriHealth</Text>
@@ -248,9 +309,28 @@ const Main= ({navigation})  => {
         style={{backgroundColor: '#4F3E65',justifyContent:'center',alignContent:'center',alignItems:'center',width:89,height:40,borderRadius: 7,flexDirection:'row',marginTop:59}}>
           <Text style={{fontWeight:'bold',fontSize:14,color:'#FFF',}}>Mulai</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+        </View>
+        </LinearGradient>
+     
     );
   };
   
 
+export default () => {
+  return (
+  <Context>
+    <App />
+  </Context>
+  );
+}
 
+
+
+const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+  },
+})

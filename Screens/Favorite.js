@@ -13,7 +13,7 @@ import { TabView, SceneMap } from "react-native-tab-view";
 
 import MakananScreen from "./MakananScreen";
 import ResepScreen from "./ResepScreen";
-import TopNavigation from "./TopNavigation";
+
 
 const Favorite = () => {
     const layout = useWindowDimensions();
